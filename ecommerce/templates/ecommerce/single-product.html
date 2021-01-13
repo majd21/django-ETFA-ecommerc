@@ -1,0 +1,89 @@
+{% extends 'ecommerce/base.html' %} 
+{% load static %} 
+{% block content %}
+
+<!-- Page Content -->
+<!-- Single Starts Here -->
+<div class="single-product">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Single Product</h1>
+        </div>
+      </div>
+      <div class="col-md-6 img-cover">
+        <img class="img-item" src="{{product.imageUrl}}" alt="">
+      </div>
+      <div class="col-md-6">
+        <div class="right-content">
+          <h4>{{product.name}}</h4>
+          <h6>${{product.price}}</h6>
+          <p>
+            {{product.description}}
+          </p>
+          <form method="POST" id="updateCartForm">
+            {% csrf_token %}
+            <label for="quantity">Quantity:</label>
+            <input
+              name="quantity"
+              type="quantity"
+              class="quantity-text"
+              id="quantity"
+              onfocus="if(this.value == '1') { this.value = ''; }"
+              onBlur="if(this.value == '') { this.value = '1';}"
+              value="1"
+            />
+            <input type="submit" data-product="{{product.id}}" class="button" id="update-cart" value="Add to cart" />
+          </form>
+          <div class="down-content">
+            <div class="share">
+              <h6>
+                Share:
+                <span
+                  ><a href="#"><i class="fa fa-facebook"></i></a
+                  ><a href="#"><i class="fa fa-linkedin"></i></a
+                  ><a href="#"><i class="fa fa-twitter"></i></a
+                ></span>
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Single Page Ends Here -->
+
+<!-- Similar Starts Here -->
+<div class="featured-items">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>You May Also Like</h1>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="owl-carousel owl-theme">
+          {% for product in products %}
+          <a href="{% url 'singleProduct' product.id %}">
+            <div class="featured-item">
+              <img src="{{product.imageUrl}}" alt="{{product.name}} image" />
+              <h4>{{product.name}}</h4>
+              <h6>${{product.price}}</h6>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Similar Ends Here -->
+<script src="{% static 'js/isotope.js' %}"></script>
+<script src="{% static 'js/flex-slider.js' %}"></script>
+
+{% endblock %}
