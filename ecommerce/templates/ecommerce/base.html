@@ -115,7 +115,7 @@ https://www.tooplate.com/view/2114-pixie
               <a class="nav-link" href="{% url 'contact' %}">Log out</a>
             </li>
             <li class="nav-item cart-icon">
-              <a class="nav-link" href="#"
+              <a class="nav-link" href="{% url 'cart' %}"
                 ><i class="fa fa-shopping-cart fa-lg"></i>
                 <p class="cart-total">{{cartItems|floatformat:0}}</p></a
               >
@@ -125,7 +125,8 @@ https://www.tooplate.com/view/2114-pixie
       </div>
     </nav>
 
-    {% block content %} {% endblock %}
+    {% block content %} 
+    {% endblock %}
 
     <!-- Subscribe Form Starts Here -->
     <div class="subscribe-form">

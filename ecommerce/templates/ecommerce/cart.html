@@ -1,0 +1,97 @@
+{% extends 'ecommerce/base.html' %} {% load static %} {% block content %}
+
+<!-- Page Content -->
+<!-- About Page Starts Here -->
+<div class="container mt-5">
+  <h2>Cart</h2>
+  <hr />
+  <h3>Total</h3>
+  <table class="table table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Total Items</th>
+        <th scope="col">Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">{{cartItems}}</th>
+        <td>${{cartTotal}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr />
+  <h3>Items</h3>
+  <table class="table table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Total</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <th scope="row">{{item.product.name}}</th>
+        <td>${{item.product.price}}</td>
+        <td>{{item.quantity}}</td>
+        <td>${{item.get_total}}</td>
+        <td>
+          
+            <button data-itemId="{{item.id}}" class="btn btn-danger deleteItem">
+                Delete
+              </button>
+          
+        </td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+  <a class="btn btn-success btn-block mb-5" href="{% url 'checkout' %}">Checkout</a>
+</div>
+<script>
+  const deleteItem = document.getElementsByClassName("deleteItem");
+  console.log(deleteItem);
+
+  for (let i = 0; i < deleteItem.length; i++) {
+    deleteItem[i].addEventListener("click", function (e) {
+        e.preventDefault()
+      let itemID = this.dataset.itemid
+      console.log("ItemID:", itemID);
+
+      if (user === "AnonymousUser") {
+        console.log("user is not logged in");
+      } else {
+        deleteItemFun(itemID);
+      }
+    });
+  }
+
+  function deleteItemFun(itemID) {
+    let url = "/delete_item/";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify({
+        'itemId': itemID,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Success:", data);
+        alert("Product Removed from cart!");
+
+        location.reload();
+      });
+  }
+</script>
+<script src="{% static 'js/isotope.js' %}"></script>
+<script src="{% static 'js/flex-slider.js' %}"></script>
+
+{% endblock %}
