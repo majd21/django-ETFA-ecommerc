@@ -1,0 +1,94 @@
+{% extends 'ecommerce/base.html' %} {% load static %} {% block content %}
+<div class="container text-center mt-5">
+  <form class="form-signin" id="signup-form">
+    <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input
+      type="text"
+      name="username"
+      id="inputUsername"
+      class="form-control"
+      placeholder="Username"
+      required
+      autofocus
+    />
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input
+      type="email"
+      name="email"
+      id="inputEmail"
+      class="form-control"
+      placeholder="Email address"
+      required
+      autofocus
+    />
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input
+      type="password"
+      name="password"
+      id="inputPassword"
+      class="form-control"
+      placeholder="Password"
+      required
+    />
+    <label for="inputPassword" class="sr-only">Confirm Password</label>
+    <input
+      type="password"
+      name="password2"
+      id="inputPassword"
+      class="form-control"
+      placeholder="Confirm Password"
+      required
+    />
+    <button
+      id="signup"
+      class="btn btn-lg mt-1 btn-primary btn-block"
+      type="submit"
+    >
+      Sign Up
+    </button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+  </form>
+  {% if error %}
+  <div class="alert alert-danger text-center" role="alert">{{error}}</div>
+  {% endif %}
+</div>
+<script>
+  const signUp = document.getElementById("signup");
+  signUp.addEventListener("click", function (e) {
+    e.preventDefault();
+    const form = document.getElementById("signup-form");
+    console.log(form);
+    let signUpData = {
+      username: form.username.value,
+      email: form.email.value,
+      password: form.password.value,
+      password2: form.password2.value,
+    };
+    if (signUpData.password !== signUpData.password2) {
+      alert("Passwords are not match");
+    } else {
+      let url = "/signup_process/";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "X-CSRFToken": csrftoken,
+        },
+        body: JSON.stringify({
+          "signup-form": signUpData,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Success:", data);
+          console.log("User Signed Up");
+          alert("You are Signed up");
+          window.location.href = "{% url 'index' %}";
+        });
+    }
+  });
+</script>
+<script src="{% static 'js/isotope.js' %}"></script>
+
+{% endblock %}

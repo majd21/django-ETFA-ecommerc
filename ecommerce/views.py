@@ -4,6 +4,8 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login
+from django.db import IntegrityError
 
 # Create your views here.
 
@@ -152,3 +154,21 @@ def checkoutProcess(request):
    
     # order.get_cart_item = 0
     return JsonResponse('Checkout is done' , safe=False)
+
+def signup(request):
+    return render(request , 'ecommerce/signup.html')
+
+def signupProcess(request):
+    data = json.loads(request.body)
+    username = data['signup-form']['username']
+    email = data['signup-form']['email']
+    password = data['signup-form']['password']
+    
+    user = User.objects.create(username = username , email = email , password = password)
+    user.save()
+    customer= Customer.objects.create(user = user)
+    customer.save()
+    login(request , user)
+
+
+    return JsonResponse('user is signUp' , safe=False)
